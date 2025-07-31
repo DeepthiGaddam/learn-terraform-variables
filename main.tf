@@ -125,7 +125,10 @@ module "ec2_instances" {
   instance_type      = "t2.micro"
   subnet_ids         = module.vpc.private_subnets[*]
   security_group_ids = [module.app_security_group.this_security_group_id]
-
+  metadata_options = {
+    http_endpoint = "enabled"
+    http_tokens   = "required" 
+  }
   tags = {
     project     = "project-alpha",
     environment = "development"
@@ -135,5 +138,5 @@ module "ec2_instances" {
 resource "aws_ebs_volume" "unencrypted" {
   availability_zone = "us-west-1a"
   size              = 8
-  encrypted         = false # Intentional violation: unencrypted EBS volume
+  encrypted         = true # Intentional violation: unencrypted EBS volume
 }
